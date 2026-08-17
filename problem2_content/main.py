@@ -26,10 +26,9 @@ from datetime import datetime
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from common import llm, push
-from review_topics import review_topics
-from publish_confirm import publish_confirm
-from sources import fetch_all, fetch_hot_topics
-
+from problem2_content.review_topics import review_topics
+from problem2_content.publish_confirm import publish_confirm
+from problem2_content.sources import fetch_all, fetch_hot_topics
 
 def collect_topics(source_items: list, hot_topics: list = None, keyword: str = "", count: int = 5) -> list:
     """AI 基于热门话题 + 真实抓取信息生成选题。
@@ -92,7 +91,6 @@ def collect_topics(source_items: list, hot_topics: list = None, keyword: str = "
             for i, it in enumerate(fallback)
         ]
 
-
 def generate_content(topic: dict, platform: str = "公众号") -> str:
     """AI 根据选题生成平台化内容"""
     messages = [
@@ -120,7 +118,6 @@ def generate_content(topic: dict, platform: str = "公众号") -> str:
     ]
     return llm.chat(messages, temperature=0.7, max_tokens=1500)
 
-
 def generate_multi_platform(topic: dict, platforms: list = None) -> dict:
     """加分项：为选题生成多个平台的版本。
 
@@ -137,7 +134,6 @@ def generate_multi_platform(topic: dict, platforms: list = None) -> dict:
             print(f"      [错误]「{p}」版本生成失败: {e}")
             versions[p] = f"（{p}版本生成失败）"
     return versions
-
 
 def generate_publish_plan(topics: list, versions_map: dict) -> str:
     """加分项：生成发布计划/报告文本。
@@ -166,7 +162,6 @@ def generate_publish_plan(topics: list, versions_map: dict) -> str:
         lines.append("")
     return "\n".join(lines)
 
-
 def save_to_word(title: str, content: str, path: str) -> str:
     """把内容保存为 Word 文档"""
     from docx import Document
@@ -179,7 +174,6 @@ def save_to_word(title: str, content: str, path: str) -> str:
             doc.add_paragraph(para.strip())
     doc.save(path)
     return path
-
 
 def main():
     print("=" * 60)
@@ -263,7 +257,6 @@ def main():
         print(f"      [错误] Word 生成失败: {e}")
 
     print("\n流程完成。")
-
 
 if __name__ == "__main__":
     main()
